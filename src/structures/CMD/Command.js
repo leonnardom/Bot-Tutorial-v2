@@ -1,3 +1,6 @@
+const ClientEmbed = require("../ClientEmbed");
+const Emojis = require("../../utils/Emojis");
+
 module.exports = class Command {
   constructor(options = {}, client) {
     this.client = client;
@@ -15,12 +18,41 @@ module.exports = class Command {
 
       await this.run(context);
     } catch (err) {
-      this.error(context, e);
+      this.error(context, err);
     }
   }
 
-  error(error) {
-    console.log(error);
+  error(context, error) {
+    const { command, author, guild, message } = context;
+
+    const EMBED = new ClientEmbed()
+      .setAuthor({
+        name: author.globalName || author.username,
+        iconURL: author.displayAvatarURL({ dynamic: true }),
+      })
+      .setDescription(`### - Detectei um Erro em um Comando.`)
+      .addFields([
+        {
+          name: `${Emojis.Diamond} Autor`,
+          value: `- **${author.globalName || author.username}**\n- ID: **${
+            author.id
+          }**`,
+          inline: true,
+        },
+        {
+          name: `${Emojis.Diamond} Servidor`,
+          value: `- **${guild.name}**\n- ID: **${guild.id}**`,
+          inline: true,
+        },
+        {
+          name: `${Emojis.Diamond} Informações`,
+          value: `- Comando: **${command.name}**\n- Erro: **${error.message}**`,
+        },
+      ]);
+
+    console.log(error); // Retorna o erro completo dentro do seu console.
+
+    message.reply({ embeds: [EMBED] });
   }
 
   ON(context) {

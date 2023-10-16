@@ -21,7 +21,15 @@ module.exports = class MessageCreate {
   }
 
   async ON(message) {
-    if (message.author.bot) return;
+    if (message.author.bot || message.channel.type != 0) return;
+
+
+    /*
+
+    || = ou - Verficação se é um Bot "ou" Canal de Texto 
+    && = e - Verficação se é um Bot "e" Canal de Texto 
+
+    */
 
     const PREFIXES = [process.env.PREFIX];
 
@@ -50,8 +58,6 @@ module.exports = class MessageCreate {
         args,
         command,
       });
-
-      console.log(context)
 
       command._run(context);
     }

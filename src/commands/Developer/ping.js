@@ -1,4 +1,4 @@
-const { Command } = require("../../");
+const { Command, ClientEmbed } = require("../../");
 
 module.exports = class PingCommand extends Command {
   constructor(client) {
@@ -13,5 +13,7 @@ module.exports = class PingCommand extends Command {
     );
   }
 
-  async run({ message }) {}
+  async run({ message, author }) {
+ 
+  }
 };
